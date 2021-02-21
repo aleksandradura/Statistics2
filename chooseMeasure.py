@@ -35,15 +35,15 @@ class ChooseMeasureOne(tk.Frame):
         button6.grid(row=7, column=0)
 
         button7 = tk.Button(self, text="Standard deviation", width=20, height=1, font="none 14 bold", bg="#3e4444",
-                            fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+                            fg="white", command=lambda: master.switch_frame(cmes.StandardDeviation))
         button7.grid(row=8, column=0)
 
         button8 = tk.Button(self, text="Population std", width=20, height=1, font="none 14 bold", bg="#3e4444",
-                            fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+                            fg="white", command=lambda: master.switch_frame(cmes.PopulationStandardDeviation))
         button8.grid(row=9, column=0)
 
         button9 = tk.Button(self, text="Mean absolute deviation", width=20, height=1, font="none 14 bold", bg="#3e4444",
-                            fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+                            fg="white", command=lambda: master.switch_frame(cmes.MeanAbsoluteDeviation))
         button9.grid(row=10, column=0)
 
         button10 = tk.Button(self, text="Interquartile range", width=20, height=1, font="none 14 bold", bg="#3e4444",
@@ -120,7 +120,7 @@ class ChooseMeasureTwo(tk.Frame):
 
             button8 = tk.Button(self, text="Poisson distribution", width=24, height=1, font="none 14 bold",
                                  bg="#3e4444",
-                                 fg="white", command=lambda: master.switch_frame(oi.OneInput))
+                                 fg="white", command=lambda: master.switch_frame(cmes.PoissonDistribution))
             button8.grid(row=9, column=0)
 
             button9 = tk.Button(self, text="central limit theorem", width=24, height=1, font="none 14 bold",
