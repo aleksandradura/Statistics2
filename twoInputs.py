@@ -16,7 +16,7 @@ class TwoInputs(tk.Frame):
         self.entry2 = tk.Entry(self, width="10")
         self.entry2.pack(pady=30)
 
-        self.button = tk.Button(self, text="Add next number", width=16, height=2, font="none 14 bold", bg="#3e4444", fg="white", command=self.saveNumbers)
+        self.button = tk.Button(self, text="Add numbers", width=16, height=2, font="none 14 bold", bg="#3e4444", fg="white", command=self.saveNumbers)
         self.button.pack(pady=20)
         self.button2 = tk.Button(self, text="Measures", width=16, height=2, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(cm.ChooseMeasureTwo))
         self.button2.pack(pady=10)

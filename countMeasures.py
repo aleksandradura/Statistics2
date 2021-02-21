@@ -60,6 +60,9 @@ class StandardDeviation(tk.Frame):
         self.answer = tk.Label(self, text="Standard deviation:", width=40, font="none 14 bold")
         self.answer.pack(pady=50)
 
+        self.arrayText = tk.Label(self)
+        self.arrayText.pack(pady=10)
+
         self.answer = tk.Label(self)
         self.answer.pack(pady=10)
 
@@ -71,8 +74,15 @@ class StandardDeviation(tk.Frame):
     def countMeasures(self):
         self.df = []
         self.df = takeResultFromFile()
+
         if len(self.df) >= 3:
             self.result = stats.tstd(self.df)
+
+            self.array = ""
+            for x in self.df:
+                self.array += str(x) + "; "
+            self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")
+
             print("Standard deviation:", str(self.result))
             self.answer.config(text="Result: " + str(self.result), font="none 14 bold")
         else:
@@ -86,6 +96,9 @@ class PopulationStandardDeviation(tk.Frame):
         self.answer = tk.Label(self, text="Population standard deviation:", width=40, font="none 14 bold")
         self.answer.pack(pady=50)
 
+        self.arrayText = tk.Label(self)
+        self.arrayText.pack(pady=10)
+
         self.answer = tk.Label(self)
         self.answer.pack(pady=10)
 
@@ -97,8 +110,15 @@ class PopulationStandardDeviation(tk.Frame):
     def countMeasures(self):
         self.df = []
         self.df = takeResultFromFile()
+
         if len(self.df) >= 3:
             self.result = stats.tstd(self.df, ddof=0)
+
+            self.array = ""
+            for x in self.df:
+                self.array += str(x) + "; "
+            self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")
+
             print("Population standard deviation:", str(self.result))
             self.answer.config(text="Result: " + str(self.result), font="none 14 bold")
         else:
@@ -112,6 +132,9 @@ class MeanAbsoluteDeviation(tk.Frame):
         self.answer = tk.Label(self, text="Mean Absolute Deviation:", width=40, font="none 14 bold")
         self.answer.pack(pady=50)
 
+        self.arrayText = tk.Label(self)
+        self.arrayText.pack(pady=10)
+
         self.answer = tk.Label(self)
         self.answer.pack(pady=10)
 
@@ -123,12 +146,18 @@ class MeanAbsoluteDeviation(tk.Frame):
     def countMeasures(self):
         self.df = []
         self.df = takeResultFromFile()
+
         if len(self.df) >= 3:
             self.mean = stats.tmean(self.df)
             self.sum = 0
             for x in self.df:
                 self.sum += abs(x - self.mean)
             self.result = self.sum / len(self.df)
+
+            self.array = ""
+            for x in self.df:
+                self.array += str(x) + "; "
+            self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")
 
             print("Mean Absolute Deviation:", str(self.result))
             self.answer.config(text="Result: " + str(self.result), font="none 14 bold")
@@ -143,8 +172,13 @@ class PoissonDistribution(tk.Frame):
         self.answer = tk.Label(self, text="Poisson Distribution:", width=40, font="none 14 bold")
         self.answer.pack(pady=50)
 
+        self.t1 = tk.Label(self)
+        self.t1.pack(pady=10)
+        self.t2 = tk.Label(self)
+        self.t2.pack(pady=10)
+
         self.answer = tk.Label(self)
-        self.answer.pack(pady=10)
+        self.answer.pack(pady=20)
 
         self.countMeasures()
 
@@ -158,6 +192,8 @@ class PoissonDistribution(tk.Frame):
         if len(self.df1) == 1 & len(self.df2) == 1:
             self.result = (np.power(self.df1[0], self.df2[0]) * np.exp(-self.df1[0])) / special.factorial(self.df2[0])
 
+            self.t1.config(text="Expected number of events : " + str(self.df1[0]), font="none 14 bold")
+            self.t2.config(text="Number of occurrences: " + str(self.df2[0]), font="none 14 bold")
             print("Poisson Distribution:", str(self.result))
             self.answer.config(text="Result: " + str(self.result), font="none 14 bold")
         else:
