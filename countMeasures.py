@@ -199,3 +199,42 @@ class PoissonDistribution(tk.Frame):
         else:
             self.answer.config(text = "Amount of values need to be exactly one in each array", font="none 28 bold")
         app.cleanFile(app.tempFile)
+
+
+class InterquartileRange(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Interquartile Range:", width=40, font="none 14 bold")
+        self.answer.pack(pady=50)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+        self.answer2 = tk.Label(self)
+        self.answer2.pack(pady=10)
+        self.answer3 = tk.Label(self)
+        self.answer3.pack(pady=10)
+
+        self.count_measures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def count_measures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        if len(self.df) >= 3:
+            self.q1 = np.percentile(self.df, 25)
+            self.q3 = np.percentile(self.df, 75)
+
+            self.result = self.q3-self.q1
+
+            print("Interquartile Range:", str(self.result))
+            self.answer.config(text="Result: " + str(self.result), font="none 14 bold")
+            self.answer2.config(text="Q1: " + str(self.q1), font="none 14 bold")
+            self.answer3.config(text="Q3: " + str(self.q3), font="none 14 bold")
+
+        else:
+            self.answer.config(text = "Amount of values need to be more than 3", font="none 28 bold")
+        app.cleanFile(app.tempFile)

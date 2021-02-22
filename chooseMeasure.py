@@ -47,7 +47,7 @@ class ChooseMeasureOne(tk.Frame):
         button9.grid(row=10, column=0)
 
         button10 = tk.Button(self, text="Interquartile range", width=20, height=1, font="none 14 bold", bg="#3e4444",
-                             fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+                             fg="white", command=lambda: master.switch_frame(cmes.InterquartileRange))
         button10.grid(row=11, column=0)
 
         button11 = tk.Button(self, text="(A)symmetry", width=26, height=1, font="none 14 bold", bg="#3e4444",
