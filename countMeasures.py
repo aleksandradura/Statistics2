@@ -1,4 +1,7 @@
 import tkinter as tk
+from matplotlib import pyplot
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 from scipy import stats
 from scipy import special
 import numpy as np
@@ -236,5 +239,48 @@ class InterquartileRange(tk.Frame):
             self.answer3.config(text="Q3: " + str(self.q3), font="none 14 bold")
 
         else:
-            self.answer.config(text = "Amount of values need to be more than 3", font="none 28 bold")
+            self.answer.config(text="Amount of values need to be more than 3", font="none 28 bold")
+        app.cleanFile(app.tempFile)
+
+
+class BoxPlot(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Box plot", width=40, font="none 14 bold")
+        self.answer.pack(pady=1)
+
+        self.count_measures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def count_measures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        if len(self.df) >= 3:
+
+            self.answer2 = tk.Label(self)
+            self.answer2.pack(pady=1)
+            self.answer3 = tk.Label(self)
+            self.answer3.pack(pady=1)
+
+            fig = Figure(figsize=(5, 3))
+            ax = fig.add_subplot()
+            labels = ['Data']
+            ax.boxplot(self.df, labels=labels)
+            self.canvas = FigureCanvasTkAgg(fig, self)
+            self.canvas.draw()
+            self.canvas.get_tk_widget().pack()
+
+            self.q1 = np.percentile(self.df, 25)
+            self.q2 = np.percentile(self.df, 50)
+            self.q3 = np.percentile(self.df, 75)
+
+            self.answer2.config(text="Q1: " + str(self.q1) + "   Q2 (Median): " + str(self.q2) + "   Q3: " + str(self.q3), font="none 10 bold")
+            self.answer3.config(text="IQR (Q3-Q1): " + str(self.q3-self.q1), font="none 10 bold")
+
+        else:
+            self.answer.config(text="Amount of values need to be more than 3", font="none 28 bold")
         app.cleanFile(app.tempFile)

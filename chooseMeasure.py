@@ -78,6 +78,10 @@ class ChooseMeasureOne(tk.Frame):
                              bg="#3e4444", fg="white", command=lambda: master.switch_frame(oi.OneInput))
         button17.grid(row=8, column=1)
 
+        button18 = tk.Button(self, text="Box plot", width=26, height=1, font="none 14 bold",
+                             bg="#3e4444", fg="white",  command=lambda: master.switch_frame(cmes.BoxPlot))
+        button18.grid(row=9, column=1)
+
         buttonExit = tk.Button(self, text="Exit", width=12, height=1, font="none 14 bold", bg="#3e4444", fg="white",
                                command=lambda: master.switch_frame(s.StartPage))
         buttonExit.grid(row=13, column=2)
@@ -100,9 +104,8 @@ class ChooseMeasureTwo(tk.Frame):
                                  fg="white", command=lambda: master.switch_frame(oi.OneInput))
             button3.grid(row=4, column=0)
 
-            button4 = tk.Button(self, text="Box plot", width=24, height=1, font="none 14 bold", bg="#3e4444",
-                                 fg="white",
-                                 command=lambda: master.switch_frame(oi.OneInput))
+            button4 = tk.Button(self, text="Pearson x^2 test", width=24, height=1, font="none 14 bold", bg="#3e4444",
+                                 fg="white", command=lambda: master.switch_frame(oi.OneInput))
             button4.grid(row=5, column=0)
 
             button5 = tk.Button(self, text="Student's t-distribution", width=24, height=1, font="none 14 bold",
@@ -165,9 +168,9 @@ class ChooseMeasureTwo(tk.Frame):
                                  fg="white", command=lambda: master.switch_frame(oi.OneInput))
             button17.grid(row=8, column=1)
 
-            button18 = tk.Button(self, text="Pearson x^2 test", width=24, height=1, font="none 14 bold", bg="#3e4444",
-                                 fg="white", command=lambda: master.switch_frame(oi.OneInput))
-            button18.grid(row=9, column=1)
+  #          button18 = tk.Button(self, text="Pearson x^2 test", width=24, height=1, font="none 14 bold", bg="#3e4444",
+  #                               fg="white", command=lambda: master.switch_frame(oi.OneInput))
+  #          button18.grid(row=9, column=1)
 
             buttonExit = tk.Button(self, text="Exit", width=12, height=1, font="none 14 bold", bg="#3e4444",
                                  fg="white", command=lambda: master.switch_frame(s.StartPage))
