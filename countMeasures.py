@@ -1,12 +1,16 @@
+import math
 import tkinter as tk
-from matplotlib import pyplot
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
-from scipy import stats
-from scipy import special
+from statistics import NormalDist
+
 import numpy as np
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
+from matplotlib.figure import Figure
+from scipy import special
+from scipy import stats
+
 import app
 import start as st
+
 
 def takeResultFromFile():
     result = []
@@ -283,4 +287,127 @@ class BoxPlot(tk.Frame):
 
         else:
             self.answer.config(text="Amount of values need to be more than 3", font="none 28 bold")
+        app.cleanFile(app.tempFile)
+
+class MinSampleCountForPopAVGStud_t(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Minimal sample count for population average\n(Student's t-distribution):", width=40, font="none 14 bold")
+        self.answer.pack(pady=30)
+
+        self.label2 = tk.Label(self, text='Margin of error (e.g. 0.45):')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.entry_Mor = tk.Entry(self)
+        self.entry_Mor.pack()
+
+        self.label3 = tk.Label(self, text='Confidence level (e.g. 0.95 ; 95%):')
+        self.label3.config(font=('helvetica', 10))
+        self.label3.pack()
+        self.entry_cl = tk.Entry(self)
+        self.entry_cl.pack()
+
+        self.label4 = tk.Label(self, text='Standard deviation:')
+        self.label4.config(font=('helvetica', 10))
+        self.label4.pack()
+        self.entry_stdDev = tk.Entry(self)
+        self.entry_stdDev.pack()
+
+        self.label4 = tk.Label(self, text='Initial sample:')
+        self.label4.config(font=('helvetica', 10))
+        self.label4.pack()
+        self.entry_initSample = tk.Entry(self)
+        self.entry_initSample.pack()
+
+        self.button1 = tk.Button(self, text='Get minimal sample size', command=self.count_measures, bg='brown', fg='white')
+        self.button1.pack(pady=20)
+
+        self.answer2 = tk.Label(self)
+        self.answer2.pack(pady=20)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def count_measures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        str_cl = self.entry_cl.get()
+        str_mor = self.entry_Mor.get()
+        str_sdtdev = self.entry_stdDev.get()
+        str_initSample = self.entry_initSample.get()
+
+        if not str_cl or not str_mor or not str_sdtdev or not str_initSample:
+            self.answer2.config(text="!!! Fill all data !!!", font="none 14 bold")
+        else:
+            if "%" in str_cl:
+                self.cl = float(str_cl.replace("%", ""))
+            else:
+                self.cl = float(str_cl.replace(",", "."))*100
+                self.initSample = int(str_initSample)
+                self.mor = float(str_mor.replace(",", "."))
+                self.std_Deviation = float(str_sdtdev.replace(",", "."))
+                self.t_alfa = stats.t.ppf(1 - ((100 - self.cl) / 2 / 100), self.initSample - 1)
+                self.result = (self.t_alfa*(self.std_Deviation/self.mor))**2
+                self.answer2.config(text="Result: " + str(math.ceil(self.result)), font="none 14 bold")
+
+        app.cleanFile(app.tempFile)
+
+
+class MinSampleCountForPopAVGNormal(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Minimal sample count for population average\n(Normal distribution):", width=40, font="none 14 bold")
+        self.answer.pack(pady=30)
+
+        self.label2 = tk.Label(self, text='Margin of error (e.g. 0.45):')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.entry_Mor = tk.Entry(self)
+        self.entry_Mor.pack()
+
+        self.label3 = tk.Label(self, text='Confidence level (e.g. 0.95 ; 95%):')
+        self.label3.config(font=('helvetica', 10))
+        self.label3.pack()
+        self.entry_cl = tk.Entry(self)
+        self.entry_cl.pack()
+
+        self.label4 = tk.Label(self, text='Standard deviation:')
+        self.label4.config(font=('helvetica', 10))
+        self.label4.pack()
+        self.entry_stdDev = tk.Entry(self)
+        self.entry_stdDev.pack()
+
+        self.button1 = tk.Button(self, text='Get minimal sample size', command=self.count_measures, bg='brown', fg='white')
+        self.button1.pack(pady=20)
+
+        self.answer2 = tk.Label(self)
+        self.answer2.pack(pady=20)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def count_measures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        str_cl = self.entry_cl.get()
+        str_mor = self.entry_Mor.get()
+        str_sdtdev = self.entry_stdDev.get()
+
+        if not str_cl or not str_mor or not str_sdtdev:
+            self.answer2.config(text="!!! Fill all data !!!", font="none 14 bold")
+        else:
+            if "%" in str_cl:
+                self.cl = float(str_cl.replace("%", ""))/100.0
+            else:
+                self.cl = float(str_cl.replace(",", "."))
+                self.mor = float(str_mor.replace(",", "."))
+                self.std_Deviation = float(str_sdtdev.replace(",", "."))
+                self.z_alfa = NormalDist().inv_cdf((1 + self.cl) / 2.)
+                self.result = (self.z_alfa*(self.std_Deviation/self.mor))**2
+                self.answer2.config(text="Result: " + str(math.ceil(self.result)), font="none 14 bold")
+
         app.cleanFile(app.tempFile)

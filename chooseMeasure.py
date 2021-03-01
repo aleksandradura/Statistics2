@@ -70,12 +70,12 @@ class ChooseMeasureOne(tk.Frame):
                              command=lambda: master.switch_frame(oi.OneInput))
         button15.grid(row=6, column=1)
 
-        button16 = tk.Button(self, text="Min sample size", width=26, height=1, font="none 14 bold", bg="#3e4444",
-                             fg="white", command=lambda: master.switch_frame(oi.OneInput))
+        button16 = tk.Button(self, text="Min sample size for population avg\nNormal distribution", width=26, height=1, font="none 14 bold", bg="#3e4444",
+                             fg="white", command=lambda: master.switch_frame(cmes.MinSampleCountForPopAVGNormal))
         button16.grid(row=7, column=1)
 
-        button17 = tk.Button(self, text="Min sample size-avg in population", width=26, height=1, font="none 14 bold",
-                             bg="#3e4444", fg="white", command=lambda: master.switch_frame(oi.OneInput))
+        button17 = tk.Button(self, text="Min sample size for population avg\nStudent's t-distribution", width=26, height=1, font="none 14 bold",
+                             bg="#3e4444", fg="white", command=lambda: master.switch_frame(cmes.MinSampleCountForPopAVGStud_t))
         button17.grid(row=8, column=1)
 
         button18 = tk.Button(self, text="Box plot", width=26, height=1, font="none 14 bold",
