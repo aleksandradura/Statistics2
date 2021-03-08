@@ -7,7 +7,7 @@ import countMeasures as cmes
 class ChooseMeasureOne(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
-        lab2 = tk.Label(self, text="Choose the measure", font="none 18 bold")
+        lab2 = tk.Label(self, text="Choose measure one", font="none 18 bold")
         lab2.grid(row=1, column=1)
 
         button1 = tk.Button(self, text="Arithmetic mean", width=20, height=1, font="none 14 bold", bg="#3e4444",
@@ -27,7 +27,7 @@ class ChooseMeasureOne(tk.Frame):
         button4.grid(row=5, column=0)
 
         button5 = tk.Button(self, text="Quantiles", width=20, height=1, font="none 14 bold", bg="#3e4444", fg="white",
-                            command=lambda: master.switch_frame(ti.TwoInputs))
+                            command=lambda: master.switch_frame(cmes.Quantile))
         button5.grid(row=6, column=0)
 
         button6 = tk.Button(self, text="Median", width=20, height=1, font="none 14 bold", bg="#3e4444", fg="white",
@@ -89,7 +89,7 @@ class ChooseMeasureOne(tk.Frame):
 class ChooseMeasureTwo(tk.Frame):
         def __init__(self, master):
             tk.Frame.__init__(self, master)
-            lab2 = tk.Label(self, text="Choose the measure", font="none 18 bold")
+            lab2 = tk.Label(self, text="Choose measure two", font="none 18 bold")
             lab2.grid(row=1, column=1)
 
             button1 = tk.Button(self, text="ANOVA", width=24, height=1, font="none 14 bold", bg="#3e4444", fg="white",
@@ -114,11 +114,11 @@ class ChooseMeasureTwo(tk.Frame):
             button5.grid(row=6, column=0)
 
             button6 = tk.Button(self, text="Pearson correlation", width=24, height=1, font="none 14 bold",
-                                 bg="#3e4444", fg="white", command=lambda: master.switch_frame(oi.OneInput))
+                                 bg="#3e4444", fg="white", command=lambda: master.switch_frame(cmes.PearsonCorrelation))
             button6.grid(row=7, column=0)
 
             button7 = tk.Button(self, text="Linear regression", width=24, height=1, font="none 14 bold", bg="#3e4444",
-                                 fg="white", command=lambda: master.switch_frame(oi.OneInput))
+                                 fg="white", command=lambda: master.switch_frame(cmes.LinearRegression))
             button7.grid(row=8, column=0)
 
             button8 = tk.Button(self, text="Poisson distribution", width=24, height=1, font="none 14 bold",

@@ -207,6 +207,109 @@ class PoissonDistribution(tk.Frame):
             self.answer.config(text = "Amount of values need to be exactly one in each array", font="none 28 bold")
         app.cleanFile(app.tempFile)
 
+class Quantile(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Quantiles:", width=40, font="none 14 bold")
+        self.answer.pack(pady=50)
+
+        self.arrayText = tk.Label(self)
+        self.arrayText.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.countMeasures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def countMeasures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        if len(self.df) >= 3:
+            self.result = np.quantile(self.df, [.25, .5, .75])
+            median = np.quantile(self.df, [.5])
+            tertile = np.quantile(self.df, [0.33, 0.66])
+            self.array = ""
+            for x in self.df:
+                self.array += str(x) + "; "
+            self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")
+
+            self.answer.config(text="Quartile: " + str(self.result) + "Tertile: " + str(tertile) + "Median: " + str(median), font="none 14 bold")
+        else:
+            self.answer.config(text = "Amount of values need to be more than 3", font="none 28 bold")
+        app.cleanFile(app.tempFile)
+
+class LinearRegression(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Linear regression:", width=40, font="none 14 bold")
+        self.answer.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.countMeasures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def countMeasures(self):
+        x, y = takeResultFromFile2Lines()
+        x = np.array(x)
+        y = np.array(y)
+        if len(x) >= 3:
+            res = stats.linregress(x,y)
+            fig = Figure(figsize=(5, 3))
+            ax = fig.add_subplot()
+            
+            ax.plot(x, y, 'o', label='original data')
+            ax.plot(x, res.intercept + res.slope*x, 'r', label='fitted line')
+            ax.legend()
+            self.canvas = FigureCanvasTkAgg(fig, self)
+            self.canvas.draw()
+            self.canvas.get_tk_widget().pack()
+            self.answer.config(text="Linear regression formula: Y = " + "{:.2f}".format(res.slope) + " * X + " + "{:.2f}".format(res.intercept), font="none 14 bold")
+        else:
+            self.answer.config(text = "Amount of values need to be more than 3", font="none 28 bold")
+        app.cleanFile(app.tempFile)
+
+class PearsonCorrelation(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Pearson correlation:", width=40, font="none 14 bold")
+        self.answer.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.countMeasures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def countMeasures(self):
+        x, y = takeResultFromFile2Lines()
+        x = np.array(x)
+        y = np.array(y)
+        if len(x) >= 3:
+            r, p = stats.pearsonr(x,y)
+            fig = Figure(figsize=(5, 3))
+            ax = fig.add_subplot()
+            ax.plot(x, y, 'o', label='original data')
+            ax.legend()
+            self.canvas = FigureCanvasTkAgg(fig, self)
+            self.canvas.draw()
+            self.canvas.get_tk_widget().pack()
+            self.answer.config(text="pearson correlation coefficient  P(X,Y)= " + "{:.2f}".format(r), font="none 14 bold")
+        else:
+            self.answer.config(text = "Amount of values need to be more than 3", font="none 28 bold")
+        app.cleanFile(app.tempFile)
 
 class InterquartileRange(tk.Frame):
     def __init__(self, master):
