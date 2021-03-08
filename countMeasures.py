@@ -1,6 +1,5 @@
 import math
 import tkinter as tk
-from statistics import NormalDist
 
 import numpy as np
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
@@ -509,7 +508,8 @@ class MinSampleCountForPopAVGNormal(tk.Frame):
                 self.cl = float(str_cl.replace(",", "."))
                 self.mor = float(str_mor.replace(",", "."))
                 self.std_Deviation = float(str_sdtdev.replace(",", "."))
-                self.z_alfa = NormalDist().inv_cdf((1 + self.cl) / 2.)
+                self.z_alfa = stats.norm.ppf((1 + self.cl) / 2.)
+                print(self.z_alfa)
                 self.result = (self.z_alfa*(self.std_Deviation/self.mor))**2
                 self.answer2.config(text="Result: " + str(math.ceil(self.result)), font="none 14 bold")
 
