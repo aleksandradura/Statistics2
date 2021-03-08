@@ -11,7 +11,7 @@ class ChooseMeasureOne(tk.Frame):
         lab2.grid(row=1, column=1)
 
         button1 = tk.Button(self, text="Arithmetic mean", width=20, height=1, font="none 14 bold", bg="#3e4444",
-                            fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+                            fg="white", command=lambda: master.switch_frame(cmes.ArithmeticMean))
         button1.grid(row=2, column=0)
 
         button2 = tk.Button(self, text="Geometric mean", width=20, height=1, font="none 14 bold", bg="#3e4444",
@@ -19,7 +19,7 @@ class ChooseMeasureOne(tk.Frame):
         button2.grid(row=3, column=0)
 
         button3 = tk.Button(self, text="Harmonic mean", width=20, height=1, font="none 14 bold", bg="#3e4444",
-                            fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+                            fg="white", command=lambda: master.switch_frame(cmes.HarmonicMean))
         button3.grid(row=4, column=0)
 
         button4 = tk.Button(self, text="Mode", width=20, height=1, font="none 14 bold", bg="#3e4444", fg="white",
@@ -63,7 +63,7 @@ class ChooseMeasureOne(tk.Frame):
         button13.grid(row=4, column=1)
 
         button14 = tk.Button(self, text="Coef of variation", width=26, height=1, font="none 14 bold", bg="#3e4444",
-                             fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+                             fg="white", command=lambda: master.switch_frame(cmes.VariationCoefficient))
         button14.grid(row=5, column=1)
 
         button15 = tk.Button(self, text="Sign test", width=26, height=1, font="none 14 bold", bg="#3e4444", fg="white",
