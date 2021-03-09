@@ -6,9 +6,11 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 from matplotlib.figure import Figure
 from scipy import special
 from scipy import stats
+import matplotlib.pyplot as plt
 
 import app
 import start as st
+
 
 
 def takeResultFromFile():
@@ -630,4 +632,120 @@ class VariationCoefficient(tk.Frame):
                 self.answer.config(text="Coefficient of variation: " + str(round(self.result,4)),  font="none 14 bold")
         else:
             self.answer.config(text = "Amount of values need to be more than 0", font="none 28 bold")
+        app.cleanFile(app.tempFile)
+
+class StudentsTDistribution(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Student's t-Distribution:", width=40, font="none 14 bold")
+        self.answer.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.answer2 = tk.Label(self)
+        self.answer2.pack(pady=10)
+
+        self.values = []
+        self.label2 = tk.Label(self, text='Degrees of freedom:')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.entry_df = tk.Entry(self)
+        self.entry_df.pack()
+
+        self.button1 = tk.Button(self, text='Draw the figure', command=self.countMeasures, bg='brown',
+                                 fg='white')
+        self.button1.pack(pady=20)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def countMeasures(self):
+
+        str_df = self.entry_df.get()
+        self.values.append(str_df)
+        fig = Figure(figsize=(5, 3))
+        ax = fig.add_subplot()
+        ax.set_title("Student's t-Distribution")
+        handles = []
+        lines = []
+
+        if (len(self.values) > 0):
+            #and str_df[0] != '-' and str_df[0] != '0'):
+
+            for i in self.values:
+                if int(i) > 0:
+                    self.x = np.linspace(stats.t.ppf(0.01, float(i)), stats.t.ppf(0.99, float(i)), 100)
+                    """self.array = ""
+                    for x in self.df:
+                        self.array += str(x) + "; "
+                    self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")"""
+                    line, = ax.plot(self.x, stats.t.pdf(self.x, float(i)))
+                    handles.append(str("k = " + str(i)))
+                    lines.append(line)
+                    self.canvas = FigureCanvasTkAgg(fig, master=self)
+                    self.canvas.draw()
+                    self.canvas.get_tk_widget().pack()
+
+                else:
+                    self.answer2.config(text="Wrong value - must be greater then 0", font="none 14 bold")
+            ax.legend(lines, handles)
+            self.answer.config(text="Resize the window to see the figure",  font="none 14 bold")
+
+        else:
+            self.answer.config(text = "Degrees of freedom must be not empty", font="none 18 bold")
+        app.cleanFile(app.tempFile)
+
+class ChiSquaredTest(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Pearson Chi-squere test:", width=40, font="none 14 bold")
+        self.answer.pack(pady=20)
+
+        self.arrayText = tk.Label(self)
+        self.arrayText.pack(pady=10)
+
+        self.arrayText2 = tk.Label(self)
+        self.arrayText2.pack(pady=10)
+
+        self.label2 = tk.Label(self, text='Trust level:')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.entry_ddof = tk.Entry(self)
+        self.entry_ddof.pack()
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.button1 = tk.Button(self, text='Count Chi-square test', command=self.countMeasures, bg='brown',
+                                 fg='white')
+        self.button1.pack(pady=20)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def countMeasures(self):
+        self.df1, self.df2 = [], []
+        self.df1, self.df2 = takeResultFromFile2Lines()
+
+        str_ddof = self.entry_ddof.get()
+
+        if len(self.df1) > 0 and len(self.df2) > 0:
+
+            a,b  = stats.chisquare(np.array(self.df1),np.array(self.df2),float(str_ddof))
+            self.array1 = ""
+            self.array2 = ""
+            for x in self.df1:
+                self.array1 += str(x) + "; "
+            for y in self.df2:
+                self.array2 += str(y) + "; "
+            self.arrayText.config(text="Array: " + str(self.array1), font="none 14 bold")
+            self.arrayText2.config(text="Array: " + str(self.array2), font="none 14 bold")
+
+            self.answer.config(text="The chi-squared test statistic: " + str(round(a,2)) + " and the p-value if the test is: " + str(round(b,4)), font="none 14 bold")
+
+        else:
+            self.answer.config(text = "Minimum one number in each array required", font="none 28 bold")
         app.cleanFile(app.tempFile)
