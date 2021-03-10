@@ -7,9 +7,12 @@ from matplotlib.figure import Figure
 from scipy import special
 from scipy import stats
 import matplotlib.pyplot as plt
+from statsmodels.stats.descriptivestats import sign_test
 
 import app
 import start as st
+import oneInput as oi
+import twoInputs as ti
 
 
 
@@ -748,4 +751,181 @@ class ChiSquaredTest(tk.Frame):
 
         else:
             self.answer.config(text = "Minimum one number in each array required", font="none 28 bold")
+        app.cleanFile(app.tempFile)
+
+class SignTest(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Sign test:", width=40, font="none 14 bold")
+        self.answer.pack(pady=10)
+
+        self.arrayText = tk.Label(self)
+        self.arrayText.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.countMeasures()
+
+        self.button = tk.Button(self, text="Insert data", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(oi.OneInput))
+        self.button.pack(pady=5)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def countMeasures(self):
+        self.df = []
+        self.df= takeResultFromFile()
+
+        if len(self.df) > 3:
+            h_median = self.df[0]
+            self.df.pop(0)
+            data_set = self.df
+            result = sign_test(data_set, h_median)
+
+            if result[0] == 0:
+                self.result = "the number of values above and below the hypothetical median " + str(h_median) + " is is the same.\nIt means that this is the median of given sample and we cannot reject H0. "
+            else:
+                self.result = "The number of values above and below the hypothetical median " + str(h_median) + " is not the same."
+                if result[1] < 0.05:
+                    self.result += "\nAssumming alpha = 0.05 we can reject H0, that number: " + str(h_median) + " is a median of given data set."
+                else:
+                    self.result += "\nAssumming alpha = 0.05 we cannot reject H0, that number: " + str(h_median) + " is a median of given data set. "
+
+            # self.result += " " + str(result)
+
+            self.array = ""
+            iter = 6
+            for x in data_set:
+                self.array += str(x) + "; "
+                iter += 1
+                if iter % 8 == 0:
+                    self.array += "\n"
+            self.arrayText.config(text="Given hypothetical median: " + str(h_median) + "\n\nGiven numbers to verify "
+                                                                                         "hypothesis: " + str(
+                self.array), font="none 14 bold")
+
+            print("Sign test:", str(self.result))
+            self.answer.config(text="Result: " + str(self.result), font="none 14 bold")
+        else:
+            self.answer.config(text="Sign test checks hypothesis if given number\nis a median of the data set.\n\n "
+                                    "Input format:\n  - first number: hypothetical median\n  - next numbers: data set"
+                                    "\nTest assumes alpha = 0.05",
+                               font="none 14 bold", justify='left')
+        app.cleanFile(app.tempFile)
+
+
+class ANOVA(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="ANOVA:", width=40, font="none 14 bold")
+        self.answer.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.arrayText1 = tk.Label(self)
+        self.arrayText1.pack(pady=10)
+
+        self.arrayText2 = tk.Label(self)
+        self.arrayText2.pack(pady=10)
+
+        self.countMeasures()
+
+        self.button = tk.Button(self, text="Insert data", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+        self.button.pack(pady=5)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def countMeasures(self):
+        self.df1, self.df2 = [], []
+        self.df1, self.df2 = takeResultFromFile2Lines()
+
+        if len(self.df1) > 2:
+            result = stats.f_oneway(self.df1, self.df2)
+
+            self.result = ""
+            if result[1] < 0.05:
+                self.result += "Assuming alpha = 0.05 we can reject H0, that given groups have the same population."
+            else:
+                self.result += "Assuming alpha = 0.05 we cannot reject H0, that given groups have the same population."
+
+            # self.result += " " + str(result)
+
+            self.array = ""
+            for x in self.df1:
+                self.array += str(x) + "; "
+            self.arrayText1.config(text="Given measures for first group: " + str(self.array), font="none 14 bold")
+
+            self.array = ""
+            for x in self.df2:
+                self.array += str(x) + "; "
+            self.arrayText2.config(text="Given measures for second group: " + str(self.array), font="none 14 bold")
+
+            print("ANOVA:", str(self.result))
+            self.answer.config(text="Result: " + str(self.result), font="none 14 bold")
+        else:
+            self.answer.config(text="The one-way ANOVA tests H0 that two \ngroups have the same population mean.\n\n"
+                                    "Input format:\n  - first column: measurements for first group\n"
+                                    "  - second column: measurements for second group\n"
+                                    "Test assumes alpha = 0.05",
+                               font="none 14 bold", justify='left')
+        app.cleanFile(app.tempFile)
+
+class ChiSquared(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Chi squared distribution:", width=40, font="none 14 bold")
+        self.answer.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.arrayText1 = tk.Label(self)
+        self.arrayText1.pack(pady=10)
+
+        self.arrayText2 = tk.Label(self)
+        self.arrayText2.pack(pady=10)
+
+        self.countMeasures()
+
+        self.button = tk.Button(self, text="Insert data", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+        self.button.pack(pady=5)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def countMeasures(self):
+        self.df1, self.df2 = [], []
+        self.df1, self.df2 = takeResultFromFile2Lines()
+
+        if len(self.df1) > 0:
+            result = stats.chisquare(self.df1,  f_exp=self.df2)
+
+            self.result = ""
+            self.result += "degrees of freedom: " + str(len(self.df1)-1)
+            self.result += "\n" + str(result)
+
+            self.array = ""
+            for x in self.df1:
+                self.array += str(x) + "; "
+            self.arrayText1.config(text="Observed frequencies: " + str(self.array), font="none 14 bold")
+
+            self.array = ""
+            for x in self.df2:
+                self.array += str(x) + "; "
+            self.arrayText2.config(text="Expected frequencies: " + str(self.array), font="none 14 bold")
+
+            print("Chi squared:", str(self.result))
+            self.answer.config(text="Result: " + str(self.result), font="none 14 bold")
+        else:
+            self.answer.config(text="The chi-square test tests H0 that the categorical \n"
+                                    "data has the given frequencies.\n\n "
+                                    "Input format:\n  - first column: observed frequencies\n"
+                                    "  - second column: expected frequencies",
+                               font="none 14 bold", justify='left')
         app.cleanFile(app.tempFile)

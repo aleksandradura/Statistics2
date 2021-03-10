@@ -67,7 +67,7 @@ class ChooseMeasureOne(tk.Frame):
         button14.grid(row=5, column=1)
 
         button15 = tk.Button(self, text="Sign test", width=26, height=1, font="none 14 bold", bg="#3e4444", fg="white",
-                             command=lambda: master.switch_frame(oi.OneInput))
+                             command=lambda: master.switch_frame(cmes.SignTest))
         button15.grid(row=6, column=1)
 
         button16 = tk.Button(self, text="Min sample size for population avg\nNormal distribution", width=26, height=1, font="none 14 bold", bg="#3e4444",
@@ -98,7 +98,7 @@ class ChooseMeasureTwo(tk.Frame):
             lab2.grid(row=1, column=1)
 
             button1 = tk.Button(self, text="ANOVA", width=24, height=1, font="none 14 bold", bg="#3e4444", fg="white",
-                                 command=lambda: master.switch_frame(oi.OneInput))
+                                 command=lambda: master.switch_frame(cmes.ANOVA))
             button1.grid(row=2, column=0)
 
             button2 = tk.Button(self, text="Correlation table", width=24, height=1, font="none 14 bold",
@@ -117,7 +117,7 @@ class ChooseMeasureTwo(tk.Frame):
                                  bg="#3e4444", fg="white", command=lambda: master.switch_frame(cmes.PearsonCorrelation))
             button6.grid(row=6, column=0)
 
-            button7 = tk.Button(self, text="Linear regression", width=24, height=1, font="none 14 bold", bg="#3e4444",
+            button7 = tk.Button(self, text="Linear regression", width=24, height=2, font="none 14 bold", bg="#3e4444",
                                  fg="white", command=lambda: master.switch_frame(cmes.LinearRegression))
             button7.grid(row=7, column=0)
 
@@ -158,9 +158,9 @@ class ChooseMeasureTwo(tk.Frame):
                                  fg="white", command=lambda: master.switch_frame(oi.OneInput))
             button15.grid(row=6, column=1)
 
-            button16 = tk.Button(self, text="Distribution variance x^2", width=24, height=1, font="none 14 bold",
+            button16 = tk.Button(self, text="Distribution variance \nchi squared", width=24, height=2, font="none 14 bold",
                                  bg="#3e4444",
-                                 fg="white", command=lambda: master.switch_frame(oi.OneInput))
+                                 fg="white", command=lambda: master.switch_frame(cmes.ChiSquared))
             button16.grid(row=7, column=1)
 
             button17 = tk.Button(self, text="Expected value (avg)", width=24, height=1, font="none 14 bold",
