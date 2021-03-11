@@ -7,7 +7,7 @@ class SampleApp(tk.Tk):
         tk.Tk.__init__(self)
         self._frame = None
         self.switch_frame(s.StartPage)
-        self.geometry('800x500')
+        self.geometry('1024x500')
         self.title("Statistic measures")
         self.configure(bg='#bdcebe')
 

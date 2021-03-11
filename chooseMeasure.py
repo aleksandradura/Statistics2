@@ -87,6 +87,16 @@ class ChooseMeasureOne(tk.Frame):
                             fg="white", command=lambda: master.switch_frame(cmes.StudentsTDistribution))
         button19.grid(row=10, column=1)
 
+        button20 = tk.Button(self, text="Standardized third central moment", width=26, height=1, font="none 14 bold",
+                            bg="#3e4444",
+                            fg="white", command=lambda: master.switch_frame(cmes.StandardizedThirdCentralMoment))
+        button20.grid(row=11, column=1)
+
+        button21 = tk.Button(self, text="Nonparametric skew", width=26, height=1, font="none 14 bold",
+                            bg="#3e4444",
+                            fg="white", command=lambda: master.switch_frame(cmes.NonParametricSkew))
+        button21.grid(row=2, column=2)
+
         buttonExit = tk.Button(self, text="Exit", width=12, height=1, font="none 14 bold", bg="#3e4444", fg="white",
                                command=lambda: master.switch_frame(s.StartPage))
         buttonExit.grid(row=13, column=2)
