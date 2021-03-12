@@ -31,7 +31,7 @@ class ChooseMeasureOne(tk.Frame):
         button5.grid(row=6, column=0)
 
         button6 = tk.Button(self, text="Median", width=20, height=1, font="none 14 bold", bg="#3e4444", fg="white",
-                            command=lambda: master.switch_frame(ti.TwoInputs))
+                            command=lambda: master.switch_frame(cmes.Median))
         button6.grid(row=7, column=0)
 
         button7 = tk.Button(self, text="Standard deviation", width=20, height=1, font="none 14 bold", bg="#3e4444",
