@@ -1,6 +1,7 @@
 import tkinter as tk
 import start as s
-tempFile = 'C:\\Users\\aleks\\OneDrive\\Pulpit\\example.csv'
+#tempFile = 'C:\\Users\\aleks\\OneDrive\\Pulpit\\example.csv'
+tempFile = 'C:\\Users\\Asus\\Desktop\\example.csv'
 
 class SampleApp(tk.Tk):
     def __init__(self):

@@ -642,6 +642,11 @@ class StudentsTDistribution(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
 
+        self.fig = Figure(figsize=(5, 3))
+        self.ax = self.fig.add_subplot()
+        self.ax.set_title("Student's t-Distribution")
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self)
+
         self.answer = tk.Label(self, text="Student's t-Distribution:", width=40, font="none 14 bold")
         self.answer.pack(pady=10)
 
@@ -660,18 +665,16 @@ class StudentsTDistribution(tk.Frame):
 
         self.button1 = tk.Button(self, text='Draw the figure', command=self.countMeasures, bg='brown',
                                  fg='white')
-        self.button1.pack(pady=20)
+        self.button1.pack(pady=10)
 
         self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
-        self.buttonExit.pack(pady=40)
+        self.buttonExit.pack(pady=10)
+
 
     def countMeasures(self):
-
         str_df = self.entry_df.get()
         self.values.append(str_df)
-        fig = Figure(figsize=(5, 3))
-        ax = fig.add_subplot()
-        ax.set_title("Student's t-Distribution")
+        self.canvas.get_tk_widget().pack_forget()
         handles = []
         lines = []
 
@@ -685,18 +688,17 @@ class StudentsTDistribution(tk.Frame):
                     for x in self.df:
                         self.array += str(x) + "; "
                     self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")"""
-                    line, = ax.plot(self.x, stats.t.pdf(self.x, float(i)))
+                    line, = self.ax.plot(self.x, stats.t.pdf(self.x, float(i)))
                     handles.append(str("k = " + str(i)))
                     lines.append(line)
-                    self.canvas = FigureCanvasTkAgg(fig, master=self)
+                    self.ax.legend(lines, handles)
                     self.canvas.draw()
                     self.canvas.get_tk_widget().pack()
 
                 else:
                     self.answer2.config(text="Wrong value - must be greater then 0", font="none 14 bold")
-            ax.legend(lines, handles)
-            self.answer.config(text="Resize the window to see the figure",  font="none 14 bold")
 
+            self.answer.config(text="Resize the window to see the figure",  font="none 14 bold")
         else:
             self.answer.config(text = "Degrees of freedom must be not empty", font="none 18 bold")
         app.cleanFile(app.tempFile)
