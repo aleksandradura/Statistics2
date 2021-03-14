@@ -1104,3 +1104,161 @@ class CorrelationTable(tk.Frame):
         else:
             self.answer.config(text = "Amount of values need to be more than 2", font="none 28 bold")
         app.cleanFile(app.tempFile)
+
+class Median(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Median:", width=40, font="none 14 bold")
+        self.answer.pack(pady=30)
+
+        self.answer2 = tk.Label(self)
+        self.answer2.pack(pady=20)
+
+        self.count_measures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def count_measures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        self.result = np.median(self.df)
+        self.answer2.config(text="Result: " + str(self.result), font="none 14 bold")
+
+        app.cleanFile(app.tempFile)
+
+class IntervalAverageNormalPopulation(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Interval for average of a normal population\n(known Standard deviation):", width=40, font="none 14 bold")
+        self.answer.pack(pady=30)
+
+        self.label2 = tk.Label(self, text='Sample size:')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.entry_siz = tk.Entry(self)
+        self.entry_siz.pack()
+
+        self.label3 = tk.Label(self, text='Sample average:')
+        self.label3.config(font=('helvetica', 10))
+        self.label3.pack()
+        self.entry_av = tk.Entry(self)
+        self.entry_av.pack()
+
+        self.label4 = tk.Label(self, text='Standard deviation:')
+        self.label4.config(font=('helvetica', 10))
+        self.label4.pack()
+        self.entry_sdv = tk.Entry(self)
+        self.entry_sdv.pack()
+
+        self.label4 = tk.Label(self, text='Confidence:')
+        self.label4.config(font=('helvetica', 10))
+        self.label4.pack()
+        self.entry_conf = tk.Entry(self)
+        self.entry_conf.pack()
+
+        self.button1 = tk.Button(self, text='Get interval', command=self.count_measures, bg='brown', fg='white')
+        self.button1.pack(pady=20)
+
+        self.answer2 = tk.Label(self)
+        self.answer2.pack(pady=20)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def count_measures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        str_siz = self.entry_siz.get()
+        str_av = self.entry_av.get()
+        str_sdv = self.entry_sdv.get()
+        str_conf = self.entry_conf.get()
+
+        if not str_siz or not str_av or not str_sdv or not str_conf:
+            self.answer2.config(text="!!! Fill all data !!!", font="none 14 bold")
+        else:
+            if "%" in str_conf:
+                self.conf = float(str_conf.replace("%", ""))
+            else:
+                self.conf = float(str_conf.replace(",", "."))*100
+            self.siz = int(str_siz)
+            self.av = float(str_av.replace(",", "."))
+            self.std_Deviation = float(str_sdv.replace(",", "."))
+            self.z_area = stats.norm.ppf((1 - (self.conf/100))/2)
+            self.result = (self.z_area*(self.std_Deviation/math.sqrt(self.siz)))
+            self.a1 = (self.av-self.result)
+            self.a2 = (self.av + self.result)
+            self.answer2.config(text="Result: (" + str(round(self.a2, 4)) +", "+ str(round(self.a1, 4)) + ")", font="none 14 bold")
+
+        app.cleanFile(app.tempFile)
+
+class IntervalAverageNormalPopulationUnkDev(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Interval for average of a normal population\n(unknown Standard deviation):", width=40, font="none 14 bold")
+        self.answer.pack(pady=30)
+
+        self.label2 = tk.Label(self, text='Sample size (<30):')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.entry_siz = tk.Entry(self)
+        self.entry_siz.pack()
+
+        self.label3 = tk.Label(self, text='Sample average:')
+        self.label3.config(font=('helvetica', 10))
+        self.label3.pack()
+        self.entry_av = tk.Entry(self)
+        self.entry_av.pack()
+
+        self.label4 = tk.Label(self, text='Standard deviation computed from the sample:')
+        self.label4.config(font=('helvetica', 10))
+        self.label4.pack()
+        self.entry_sdv = tk.Entry(self)
+        self.entry_sdv.pack()
+
+        self.label4 = tk.Label(self, text='Confidence:')
+        self.label4.config(font=('helvetica', 10))
+        self.label4.pack()
+        self.entry_conf = tk.Entry(self)
+        self.entry_conf.pack()
+
+        self.button1 = tk.Button(self, text='Get interval', command=self.count_measures, bg='brown', fg='white')
+        self.button1.pack(pady=20)
+
+        self.answer2 = tk.Label(self)
+        self.answer2.pack(pady=20)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def count_measures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        str_siz = self.entry_siz.get()
+        str_av = self.entry_av.get()
+        str_sdv = self.entry_sdv.get()
+        str_conf = self.entry_conf.get()
+
+        if not str_siz or not str_av or not str_sdv or not str_conf:
+            self.answer2.config(text="!!! Fill all data !!!", font="none 14 bold")
+        else:
+            if "%" in str_conf:
+                self.conf = float(str_conf.replace("%", ""))
+            else:
+                self.conf = float(str_conf.replace(",", "."))*100
+            self.siz = int(str_siz)
+            self.av = float(str_av.replace(",", "."))
+            self.std_Deviation = float(str_sdv.replace(",", "."))
+            self.t_stud = stats.t.ppf((1 - (self.conf/100))/2, self.siz-1)
+            self.result = (self.t_stud*(self.std_Deviation/math.sqrt(self.siz)))
+            self.a1 = (self.av-self.result)
+            self.a2 = (self.av + self.result)
+            self.answer2.config(text="Result: (" + str(round(self.a2, 4)) +", "+ str(round(self.a1, 4)) + ")", font="none 14 bold")
+
+        app.cleanFile(app.tempFile)
