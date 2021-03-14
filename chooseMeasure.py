@@ -97,6 +97,12 @@ class ChooseMeasureOne(tk.Frame):
                             fg="white", command=lambda: master.switch_frame(cmes.NonParametricSkew))
         button21.grid(row=2, column=2)
 
+        button22 = tk.Button(self, text="Distribution Of Arithmetic Average", width=26, height=1, font="none 14 bold",
+                             bg="#3e4444",
+                             fg="white", command=lambda: master.switch_frame(cmes.DistributionOfArithmeticAverage))
+
+        button22.grid(row=3, column=2)
+
         buttonExit = tk.Button(self, text="Exit", width=12, height=1, font="none 14 bold", bg="#3e4444", fg="white",
                                command=lambda: master.switch_frame(s.StartPage))
         buttonExit.grid(row=13, column=2)

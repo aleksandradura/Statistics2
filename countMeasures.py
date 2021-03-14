@@ -9,6 +9,7 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import pandas as pd
 from statsmodels.stats.descriptivestats import sign_test
+import seaborn as sns
 
 import app
 import start as st
@@ -1128,6 +1129,70 @@ class Median(tk.Frame):
         self.answer2.config(text="Result: " + str(self.result), font="none 14 bold")
 
         app.cleanFile(app.tempFile)
+
+
+class DistributionOfArithmeticAverage(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.fig = Figure(figsize=(5, 3))
+        self.ax = self.fig.add_subplot()
+        self.ax.set_title("Distribution Of Arithmetic Average")
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self)
+
+        self.answer = tk.Label(self, text="Distribution Of Arithmetic Average", width=40, font="none 14 bold")
+        self.answer.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.answer2 = tk.Label(self)
+        self.answer2.pack(pady=10)
+
+        self.values = []
+        self.label2 = tk.Label(self, text='Degrees of freedom')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.entry_df = tk.Entry(self)
+        self.entry_df.pack()
+
+        self.button1 = tk.Button(self, text='Draw the figure', command=self.countMeasures, bg='brown',
+                                 fg='white')
+        self.button1.pack(pady=10)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+
+    def countMeasures(self):
+        x = np.array(takeResultFromFile()).astype(np.float)
+        str_df = self.entry_df.get()
+        self.values.append(str_df)
+        self.canvas.get_tk_widget().pack_forget()
+        if (len(self.values) > 0):
+            for i in self.values:
+                if int(i) > 1:
+                    sample_props = np.zeros(10000)
+                    for s in range(10000):
+                        sample = np.random.choice(x, int(i))
+                        sample_props[s] = sample.mean()
+
+                    fig, ax = plt.subplots()
+                    sns.distplot(sample_props, color='darkblue',
+                                 hist_kws={'edgecolor' 'black'}).set(xlabel='Sample Mean',
+                                                                            ylabel='Density')
+                    ax.set_title("Distribution Of Arithmetic Average")
+                    self.canvas = FigureCanvasTkAgg(fig, master=self)
+
+                    self.canvas.draw()
+                    self.canvas.get_tk_widget().pack()
+                else:
+                    self.answer2.config(text="Wrong value - must be greater then 1", font="none 14 bold")
+            self.answer.config(text="Resize the window to see the figure",  font="none 14 bold")
+        else:
+            self.answer.config(text="Degrees of freedom must be not empty", font="none 18 bold")
+        app.cleanFile(app.tempFile)
+
 
 class IntervalAverageNormalPopulation(tk.Frame):
     def __init__(self, master):
