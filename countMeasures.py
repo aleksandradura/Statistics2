@@ -1021,3 +1021,37 @@ class Median(tk.Frame):
         self.answer2.config(text="Result: " + str(self.result), font="none 14 bold")
 
         app.cleanFile(app.tempFile)
+
+class Tailedness(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Tailedness:", width=40, font="none 14 bold")
+
+        self.answer.pack(pady=50)
+
+        self.arrayText = tk.Label(self)
+        self.arrayText.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.countMeasures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444",
+                                    fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def countMeasures(self):
+        self.df = takeResultFromFile()
+        self.correctValue = True
+
+        if len(self.df) > 5:
+            self.array = ", ".join([str(i) for i in self.df])
+            self.result = stats.kurtosis(self.df)
+
+            self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")
+            self.answer.config(text="Tailedness: " + str(round(self.result, 4)), font="none 14 bold")
+        else:
+            self.answer.config(text="Amount of values need to be more than 5", font="none 28 bold")
+        app.cleanFile(app.tempFile)
