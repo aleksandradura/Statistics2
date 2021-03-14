@@ -697,7 +697,6 @@ class StudentsTDistribution(tk.Frame):
 
                 else:
                     self.answer2.config(text="Wrong value - must be greater then 0", font="none 14 bold")
-
             self.answer.config(text="Resize the window to see the figure",  font="none 14 bold")
         else:
             self.answer.config(text = "Degrees of freedom must be not empty", font="none 18 bold")
