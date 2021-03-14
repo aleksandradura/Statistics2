@@ -54,8 +54,8 @@ class ChooseMeasureOne(tk.Frame):
                              fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
         button11.grid(row=2, column=1)
 
-        button12 = tk.Button(self, text="tailedness", width=26, height=1, font="none 14 bold", bg="#3e4444", fg="white",
-                             command=lambda: master.switch_frame(ti.TwoInputs))
+        button12 = tk.Button(self, text="Tailedness", width=26, height=1, font="none 14 bold", bg="#3e4444", fg="white",
+                             command=lambda: master.switch_frame(cmes.Tailedness))
         button12.grid(row=3, column=1)
 
         button13 = tk.Button(self, text="Shapiro-Wilk test", width=26, height=1, font="none 14 bold", bg="#3e4444",
@@ -112,7 +112,7 @@ class ChooseMeasureTwo(tk.Frame):
             button1.grid(row=2, column=0)
 
             button2 = tk.Button(self, text="Correlation table", width=24, height=1, font="none 14 bold",
-                                 bg="#3e4444", fg="white", command=lambda: master.switch_frame(oi.OneInput))
+                                 bg="#3e4444", fg="white", command=lambda: master.switch_frame(cmes.CorrelationTable))
             button2.grid(row=3, column=0)
 
             button3 = tk.Button(self, text="t-Student test", width=24, height=1, font="none 14 bold", bg="#3e4444",
