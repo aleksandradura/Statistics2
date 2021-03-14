@@ -1327,3 +1327,111 @@ class IntervalAverageNormalPopulationUnkDev(tk.Frame):
             self.answer2.config(text="Result: (" + str(round(self.a2, 4)) +", "+ str(round(self.a1, 4)) + ")", font="none 14 bold")
 
         app.cleanFile(app.tempFile)
+class GeometricMean(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Geometric mean:", width=40, font="none 14 bold")
+        self.answer.pack(pady=50)
+
+        self.arrayText = tk.Label(self)
+        self.arrayText.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.countMeasures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def countMeasures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        if len(self.df) > 0:
+            geomean = stats.gmean(self.df)
+            self.result = geomean
+            self.array = ""
+            for x in self.df:
+                self.array += str(x) + "; "
+            self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")
+
+            if(str(self.result)!="nan"):
+                self.answer.config(text="Geometric Mean: " + str(self.result),  font="none 14 bold")
+            else:
+                self.answer.config(text="Geometric mean cannot be calculated for negative values.",  font="none 14 bold")
+        else:
+            self.answer.config(text = "Amount of values need to be more than 0", font="none 28 bold")
+        app.cleanFile(app.tempFile)
+
+class Mode(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Mode:", width=40, font="none 14 bold")
+        self.answer.pack(pady=50)
+
+        self.arrayText = tk.Label(self)
+        self.arrayText.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.countMeasures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def countMeasures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        if len(self.df) > 0:
+            mode = stats.mode(np.array(self.df))
+            self.result = float(mode[0])
+            self.array = ""
+            for x in self.df:
+                self.array += str(x) + "; "
+            self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")
+
+            self.answer.config(text="Mode: " + str(self.result),  font="none 14 bold")
+        else:
+            self.answer.config(text = "Amount of values need to be more than 0", font="none 28 bold")
+        app.cleanFile(app.tempFile)
+
+class Skew(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Skewness:", width=40, font="none 14 bold")
+        self.answer.pack(pady=50)
+
+        self.arrayText = tk.Label(self)
+        self.arrayText.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.countMeasures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=40)
+
+    def countMeasures(self):
+        self.df = []
+        self.df = takeResultFromFile()
+
+        if len(self.df) > 0:
+            skewness = stats.skew(self.df)
+            self.result = skewness
+            self.array = ""
+            for x in self.df:
+                self.array += str(x) + "; "
+            self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")
+
+            self.answer.config(text="Skewness: " + str(self.result),  font="none 14 bold")
+        else:
+            self.answer.config(text = "Amount of values need to be more than 0", font="none 28 bold")
+        app.cleanFile(app.tempFile)
+

@@ -15,7 +15,7 @@ class ChooseMeasureOne(tk.Frame):
         button1.grid(row=2, column=0)
 
         button2 = tk.Button(self, text="Geometric mean", width=20, height=1, font="none 14 bold", bg="#3e4444",
-                            fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+                            fg="white", command=lambda: master.switch_frame(cmes.GeometricMean))
         button2.grid(row=3, column=0)
 
         button3 = tk.Button(self, text="Harmonic mean", width=20, height=1, font="none 14 bold", bg="#3e4444",
@@ -23,7 +23,7 @@ class ChooseMeasureOne(tk.Frame):
         button3.grid(row=4, column=0)
 
         button4 = tk.Button(self, text="Mode", width=20, height=1, font="none 14 bold", bg="#3e4444", fg="white",
-                            command=lambda: master.switch_frame(ti.TwoInputs))
+                            command=lambda: master.switch_frame(cmes.Mode))
         button4.grid(row=5, column=0)
 
         button5 = tk.Button(self, text="Quantiles", width=20, height=1, font="none 14 bold", bg="#3e4444", fg="white",
@@ -51,7 +51,7 @@ class ChooseMeasureOne(tk.Frame):
         button10.grid(row=11, column=0)
 
         button11 = tk.Button(self, text="(A)symmetry", width=26, height=1, font="none 14 bold", bg="#3e4444",
-                             fg="white", command=lambda: master.switch_frame(ti.TwoInputs))
+                             fg="white", command=lambda: master.switch_frame(cmes.Skew))
         button11.grid(row=2, column=1)
 
         button12 = tk.Button(self, text="Tailedness", width=26, height=1, font="none 14 bold", bg="#3e4444", fg="white",
