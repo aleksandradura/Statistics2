@@ -112,7 +112,7 @@ class ChooseMeasureTwo(tk.Frame):
             button1.grid(row=2, column=0)
 
             button2 = tk.Button(self, text="Correlation table", width=24, height=1, font="none 14 bold",
-                                 bg="#3e4444", fg="white", command=lambda: master.switch_frame(oi.OneInput))
+                                 bg="#3e4444", fg="white", command=lambda: master.switch_frame(cmes.CorrelationTable))
             button2.grid(row=3, column=0)
 
             button3 = tk.Button(self, text="t-Student test", width=24, height=1, font="none 14 bold", bg="#3e4444",

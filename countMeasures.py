@@ -7,6 +7,7 @@ from matplotlib.figure import Figure
 from scipy import special
 from scipy import stats
 import matplotlib.pyplot as plt
+import pandas as pd
 from statsmodels.stats.descriptivestats import sign_test
 
 import app
@@ -1054,4 +1055,51 @@ class Tailedness(tk.Frame):
             self.answer.config(text="Tailedness: " + str(round(self.result, 4)), font="none 14 bold")
         else:
             self.answer.config(text="Amount of values need to be more than 5", font="none 28 bold")
+        app.cleanFile(app.tempFile)
+
+
+class CorrelationTable(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Correlation table:", width=40, font="none 14 bold")
+        self.answer.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.countMeasures()
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=1, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def countMeasures(self):
+        self.first, self.second = takeResultFromFile2Lines()
+
+        if len(self.first) >= 2:
+            self.data = {0: np.array(self.first),
+                         1: np.array(self.second)}
+
+            self.df = pd.DataFrame(self.data)
+            self.corrTable = self.df.corr()
+            self.labels = ["First series", "Second series"]
+
+            fig = Figure(figsize=(5, 3))
+            ax = fig.add_subplot()
+            ax.matshow(self.corrTable)
+
+            # add labels to corr table
+            for i in range(len(self.corrTable)):
+                for j in range(len(self.corrTable.columns)):
+                    ax.text(j, i, round(self.corrTable[i][j], 4), ha="center", va="center", color="w")
+
+            ax.set_xticks(np.arange(len(self.labels)))
+            ax.set_yticks(np.arange(len(self.labels)))
+            ax.set_xticklabels(self.labels)
+            ax.set_yticklabels(self.labels)
+            self.canvas = FigureCanvasTkAgg(fig, self)
+            self.canvas.draw()
+            self.canvas.get_tk_widget().pack()
+        else:
+            self.answer.config(text = "Amount of values need to be more than 2", font="none 28 bold")
         app.cleanFile(app.tempFile)
