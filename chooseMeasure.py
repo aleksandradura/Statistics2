@@ -153,11 +153,11 @@ class ChooseMeasureTwo(tk.Frame):
 
             button12 = tk.Button(self, text="Interval for avg (std)", width=24, height=1, font="none 14 bold",
                                  bg="#3e4444",
-                                 fg="white", command=lambda: master.switch_frame(oi.OneInput))
+                                 fg="white", command=lambda: master.switch_frame(cmes.IntervalAverageNormalPopulation))
             button12.grid(row=3, column=1)
 
             button13 = tk.Button(self, text="Interval for avg", width=24, height=1, font="none 14 bold", bg="#3e4444",
-                                 fg="white", command=lambda: master.switch_frame(oi.OneInput))
+                                 fg="white", command=lambda: master.switch_frame(cmes.IntervalAverageNormalPopulationUnkDev))
             button13.grid(row=4, column=1)
 
             button14 = tk.Button(self, text="Distribution avg (known std)", width=24, height=1, font="none 14 bold",
