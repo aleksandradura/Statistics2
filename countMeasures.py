@@ -2,6 +2,7 @@ import math
 import tkinter as tk
 
 import numpy as np
+from math import sqrt
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 from matplotlib.figure import Figure
 from scipy import special
@@ -1431,8 +1432,110 @@ class Skew(tk.Frame):
                 self.array += str(x) + "; "
             self.arrayText.config(text="Array: " + str(self.array), font="none 14 bold")
 
-            self.answer.config(text="Skewness: " + str(self.result),  font="none 14 bold")
+            self.answer.config(text="0Skewness: " + str(self.result),  font="none 14 bold")
         else:
             self.answer.config(text = "Amount of values need to be more than 0", font="none 28 bold")
         app.cleanFile(app.tempFile)
 
+class CentralLimitTheorem(tk.Frame):
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.significance_levels = {
+            0.2: 1.282,
+            0.1: 1.645,
+            0.05: 1.96,
+            0.02: 2.326,
+            0.01: 2.576
+        }
+
+        self.answer = tk.Label(self,
+                               text="Interval for average of a normal population\n(unknown Standard deviation):",
+                               width=40, font="none 14 bold")
+        self.answer.pack(pady=30)
+
+        self.label2 = tk.Label(self, text='Observed mean')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.observed_mean = tk.Entry(self)
+        self.observed_mean.pack()
+
+        self.label2 = tk.Label(self, text='Mean based on normal distribution')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.mean_from_normal_dist = tk.Entry(self)
+        self.mean_from_normal_dist.pack()
+
+        self.label2 = tk.Label(self, text='Variance based on normal distribution')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.variance_from_normal_dist = tk.Entry(self)
+        self.variance_from_normal_dist.pack()
+
+        self.label2 = tk.Label(self, text='Number of samples')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.number_of_samples = tk.Entry(self)
+        self.number_of_samples.pack()
+
+        self.label2 = tk.Label(self, text='Significance')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.significance = tk.Entry(self)
+        self.significance.pack()
+
+        self.button1 = tk.Button(self, text='Validate H0', command=self.count_measures, bg='brown',
+                                 fg='white')
+        self.button1.pack(pady=10)
+
+        self.answer = tk.Label(self)
+        self.answer.pack(pady=10)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=4, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def count_measures(self):
+        observed_mean = float(self.observed_mean.get())
+        mean_from_normal_dist = float(self.mean_from_normal_dist.get())
+        variance_from_normal_dist = float(self.variance_from_normal_dist.get())
+        number_of_samples = float(self.number_of_samples.get())
+        significance = float(self.significance.get())
+
+        expected_value = ((observed_mean - mean_from_normal_dist) / sqrt(variance_from_normal_dist) * sqrt(number_of_samples))
+        msg = str()
+        msg += self.expected_larger_than_z_alpha(expected_value, significance)
+        msg += self.expected_lower_than_z_alpha(expected_value, significance)
+        msg += self.expected_different_from_z_alpha(expected_value, significance)
+        self.answer.config(text=msg, font="none 10")
+
+    def expected_larger_than_z_alpha(self, expected_value, significance):
+        msg = "H1 = m > m1: "
+        if expected_value > self.significance_levels[significance]:
+            msg += "H0 can be rejected: H1 " + str(expected_value) + " larger than H0 " + str(
+                self.significance_levels[significance]) + "\n"
+        else:
+            msg += "H0 cannot discredited: H1 " + str(expected_value) + " is not larger than H0 " + str(
+                self.significance_levels[significance]) + "\n"
+        return msg
+
+    def expected_lower_than_z_alpha(self, expected_value, significance):
+        msg = "H1 = m < m1: "
+        if expected_value <= -self.significance_levels[significance]:
+            msg += "H0 can be rejected: H1 " + str(expected_value) + " lower than H0 " + str(
+                self.significance_levels[significance]) + "\n"
+        else:
+            msg += "H0 cannot discredited: H1 " + str(expected_value) + " is not lower than H0 " + str(
+                self.significance_levels[significance]) + "\n"
+        return msg
+
+    def expected_different_from_z_alpha(self, expected_value, significance):
+        msg = "H1 = m != m1: "
+        if expected_value != self.significance_levels[significance * 2]:
+            msg+="H0 can be rejected: H1 " + str(expected_value) + " is different from H0 " + str(
+                self.significance_levels[significance]) + "\n"
+        else:
+            msg += "H0 cannot discredited: H1 " + str(expected_value) +  "is not different from H0 -" + str(
+                -self.significance_levels[significance]) + "\n"
+        return msg
+
+        app.cleanFile(app.tempFile)
