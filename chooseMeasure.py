@@ -103,11 +103,23 @@ class ChooseMeasureOne(tk.Frame):
 
         button22.grid(row=3, column=2)
 
-        button23 = tk.Button(self, text="Central limit theorem", width=26, height=1, font="none 14 bold",
+        button23 = tk.Button(self, text="Test for expected value (average)", width=26, height=1, font="none 14 bold",
+                             bg="#3e4444",
+                             fg="white", command=lambda: master.switch_frame(cmes.TestForExpectedAverage))
+
+        button23.grid(row=4, column=2)
+
+        button24 = tk.Button(self, text="Central limit theorem", width=26, height=1, font="none 14 bold",
                              bg="#3e4444",
                              fg="white", command=lambda: master.switch_frame(cmes.CentralLimitTheorem))
 
-        button23.grid(row=3, column=2)
+        button24.grid(row=5, column=2)
+
+        button25 = tk.Button(self, text="t-Student test statistics", width=26, height=1, font="none 14 bold",
+                             bg="#3e4444",
+                             fg="white", command=lambda: master.switch_frame(cmes.TStudentTestStatisticsComputation))
+
+        button25.grid(row=6, column=2)
 
 
         buttonExit = tk.Button(self, text="Exit", width=12, height=1, font="none 14 bold", bg="#3e4444", fg="white",

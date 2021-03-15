@@ -1437,7 +1437,7 @@ class Skew(tk.Frame):
             self.answer.config(text = "Amount of values need to be more than 0", font="none 28 bold")
         app.cleanFile(app.tempFile)
 
-class CentralLimitTheorem(tk.Frame):
+class TestForExpectedAverage(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
 
@@ -1449,10 +1449,8 @@ class CentralLimitTheorem(tk.Frame):
             0.01: 2.576
         }
 
-        self.answer = tk.Label(self,
-                               text="Interval for average of a normal population\n(unknown Standard deviation):",
-                               width=40, font="none 14 bold")
-        self.answer.pack(pady=30)
+        self.answer = tk.Label(self, text="Test for expected value (average):", width=40, font="none 12 bold")
+        self.answer.pack(pady=50)
 
         self.label2 = tk.Label(self, text='Observed mean')
         self.label2.config(font=('helvetica', 10))
@@ -1539,3 +1537,33 @@ class CentralLimitTheorem(tk.Frame):
         return msg
 
         app.cleanFile(app.tempFile)
+
+class CentralLimitTheorem(tk.Frame):
+
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="Central limit theorem", width=40, font="none 12 bold")
+        self.answer.pack(pady=50)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=4, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def count_measures(self):
+        return
+
+class TStudentTestStatisticsComputation(tk.Frame):
+
+    def __init__(self, master):
+        tk.Frame.__init__(self, master)
+
+        self.answer = tk.Label(self, text="t-Student test - computation of the statistics", width=40, font="none 12 bold")
+        self.answer.pack(pady=50)
+
+        self.buttonExit = tk.Button(self, text="Exit", width=14, height=4, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
+        self.buttonExit.pack(pady=10)
+
+    def count_measures(self):
+        return
+
+
