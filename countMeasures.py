@@ -454,12 +454,13 @@ class MinSampleCountForPopAVGStud_t(tk.Frame):
                 self.cl = float(str_cl.replace("%", ""))
             else:
                 self.cl = float(str_cl.replace(",", "."))*100
-                self.initSample = int(str_initSample)
-                self.mor = float(str_mor.replace(",", "."))
-                self.std_Deviation = float(str_sdtdev.replace(",", "."))
-                self.t_alfa = stats.t.ppf(1 - ((100 - self.cl) / 2 / 100), self.initSample - 1)
-                self.result = (self.t_alfa*(self.std_Deviation/self.mor))**2
-                self.answer2.config(text="Result: " + str(math.ceil(self.result)), font="none 14 bold")
+
+            self.initSample = int(str_initSample)
+            self.mor = float(str_mor.replace(",", "."))
+            self.std_Deviation = float(str_sdtdev.replace(",", "."))
+            self.t_alfa = stats.t.ppf(1 - ((100 - self.cl) / 2 / 100), self.initSample - 1)
+            self.result = (self.t_alfa*(self.std_Deviation/self.mor))**2
+            self.answer2.config(text="Result: " + str(math.ceil(self.result)), font="none 14 bold")
 
         app.cleanFile(app.tempFile)
 
@@ -513,12 +514,12 @@ class MinSampleCountForPopAVGNormal(tk.Frame):
                 self.cl = float(str_cl.replace("%", ""))/100.0
             else:
                 self.cl = float(str_cl.replace(",", "."))
-                self.mor = float(str_mor.replace(",", "."))
-                self.std_Deviation = float(str_sdtdev.replace(",", "."))
-                self.z_alfa = stats.norm.ppf((1 + self.cl) / 2.)
-                print(self.z_alfa)
-                self.result = (self.z_alfa*(self.std_Deviation/self.mor))**2
-                self.answer2.config(text="Result: " + str(math.ceil(self.result)), font="none 14 bold")
+
+            self.mor = float(str_mor.replace(",", "."))
+            self.std_Deviation = float(str_sdtdev.replace(",", "."))
+            self.z_alfa = stats.norm.ppf((1 + self.cl) / 2.)
+            self.result = (self.z_alfa*(self.std_Deviation/self.mor))**2
+            self.answer2.config(text="Result: " + str(math.ceil(self.result)), font="none 14 bold")
 
         app.cleanFile(app.tempFile)
 
