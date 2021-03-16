@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from statsmodels.stats.descriptivestats import sign_test
 import seaborn as sns
+import statistics as statistics_native
 
 import app
 import start as st
@@ -1557,13 +1558,92 @@ class TStudentTestStatisticsComputation(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
 
-        self.answer = tk.Label(self, text="t-Student test - computation of the statistics", width=40, font="none 12 bold")
-        self.answer.pack(pady=50)
+        self.first_dataset = []
+        self.second_dataset = []
+
+        self.first_sample_size = int()
+        self.second_sample_size = int()
+
+        self.first_mean = float()
+        self.second_mean = float()
+
+        self.first_variance = float()
+        self.second_variance = float()
+
+        self.label = tk.Label(self, text="t-Student test - computation of the statistics", width=40, font="none 12 bold")
+        self.label.pack(pady=50)
+
+        self.label2 = tk.Label(self, text='Application of t-student test to compare averages of two populations')
+        self.label2.config(font=('helvetica', 10))
+
+        self.label2 = tk.Label(self, text='First dataset for comparison')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.dataset_1 = tk.Entry(self)
+        self.dataset_1.pack()
+
+        self.label2 = tk.Label(self, text='Second dataset for comparison')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.dataset_2 = tk.Entry(self)
+        self.dataset_2.pack()
+
+        self.label2 = tk.Label(self, text='Significance level')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.significance_level = tk.Entry(self)
+        self.significance_level.pack()
+
+        self.button1 = tk.Button(self, text='Validate H0', command=self.count_measures, bg='brown',
+                                 fg='white')
+        self.button1.pack(pady=10)
 
         self.buttonExit = tk.Button(self, text="Exit", width=14, height=4, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
         self.buttonExit.pack(pady=10)
 
     def count_measures(self):
-        return
+        self.first_dataset = self.convert_list_of_strings_to_numericals(self.dataset_1.get().split(","))
+        self.second_dataset = self.convert_list_of_strings_to_numericals(self.dataset_2.get().split(","))
 
+        self.first_sample_size = len(self.first_dataset)
+        self.second_sample_size = len(self.second_dataset)
+
+        self.first_mean = statistics_native.mean(self.first_dataset)
+        self.second_mean = statistics_native.mean(self.second_dataset)
+
+        self.first_variance = statistics_native.variance(self.first_dataset)
+        self.second_variance = statistics_native.variance(self.second_dataset)
+
+        significance_level = float(self.significance_level.get())
+        if self.calculate_t() == self.get_ref_t(significance_level):
+            msg = "H0 Cannot be rejected"
+        else:
+            msg = "H0 Rejected: population averages not equal"
+        self.answer.config(text=msg, font="none 10")
+
+    def convert_list_of_strings_to_numericals(self, list):
+        list_of_numericals = []
+        for element in list:
+            try:
+                val_to_append = int(element)
+            except ValueError:
+                try:
+                    val_to_append = float(element)
+                except ValueError:
+                    continue
+            list_of_numericals.append(val_to_append)
+        return list_of_numericals
+
+    def calculate_t(self):
+        sqrt_first_part = ((self.first_sample_size - 1) * self.first_variance + (
+                    self.second_sample_size - 1) * self.second_variance) / (
+                                      self.first_sample_size + self.second_sample_size - 2)
+        sqrt_second_part = (1 / self.first_sample_size + 1 / self.second_sample_size)
+        denominator = sqrt(sqrt_first_part * sqrt_second_part)
+        t = (self.first_mean - self.second_mean) / denominator
+        return t
+
+    def get_ref_t(self, alpha):
+        gl = self.first_sample_size + self.second_sample_size - 2
+        return stats.t.ppf(1-(alpha/2), gl)
 
