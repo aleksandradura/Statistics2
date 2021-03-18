@@ -1544,14 +1544,74 @@ class CentralLimitTheorem(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
 
-        self.answer = tk.Label(self, text="Central limit theorem", width=40, font="none 12 bold")
-        self.answer.pack(pady=50)
+        self.label = tk.Label(self, text="Central limit theorem", width=40, font="none 12 bold")
+        self.label.pack(pady=30)
+
+        self.label2 = tk.Label(self, text='Mean')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.mean_input = tk.Entry(self)
+        self.mean_input.pack()
+
+        self.label2 = tk.Label(self, text='Standard Deviation')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.std_dev_input = tk.Entry(self)
+        self.std_dev_input.pack()
+
+        self.label2 = tk.Label(self, text='Number of samples')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.number_of_samples_input = tk.Entry(self)
+        self.number_of_samples_input.pack()
+
+        self.label2 = tk.Label(self, text='Range of probability')
+        self.label2.config(font=('helvetica', 10))
+        self.label2.pack()
+        self.range_input = tk.Entry(self)
+        self.range_input.pack()
+
+        self.button1 = tk.Button(self, text='Validate H0', command=self.count_measures, bg='brown',
+                                 fg='white')
+        self.button1.pack(pady=10)
+
+        self.answer = tk.Label(self, text="", width=40, font="none 12 bold")
+        self.answer.pack(pady=15)
 
         self.buttonExit = tk.Button(self, text="Exit", width=14, height=4, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
         self.buttonExit.pack(pady=10)
 
     def count_measures(self):
+
+        mean = float(self.mean_input.get())
+        std_deviation = float(self.std_dev_input.get())
+        number_of_samples = int(self.number_of_samples_input.get())
+        range_of_probability = self.convert_list_of_strings_to_numericals(self.range_input.get().split(","))
+
+        probability_lower = (range_of_probability[0] - mean) / (std_deviation / sqrt(number_of_samples))
+        probability_higher = (range_of_probability[1] -mean) / (std_deviation / sqrt(number_of_samples))
+
+        probability = stats.norm.pdf(probability_higher, 0, 1) - stats.norm.pdf(probability_lower, 0, 1)
+
+        msg = "Probability that the value would be in range\n" + str(range_of_probability[0]) + " - " \
+              + str(range_of_probability[1]) + "\nis equal to: " + str(probability)
+
+        self.answer.config(text=msg, font="none 10")
+
         return
+
+    def convert_list_of_strings_to_numericals(self, list):
+        list_of_numericals = []
+        for element in list:
+            try:
+                val_to_append = int(element)
+            except ValueError:
+                try:
+                    val_to_append = float(element)
+                except ValueError:
+                    continue
+            list_of_numericals.append(val_to_append)
+        return list_of_numericals
 
 class TStudentTestStatisticsComputation(tk.Frame):
 
@@ -1571,7 +1631,7 @@ class TStudentTestStatisticsComputation(tk.Frame):
         self.second_variance = float()
 
         self.label = tk.Label(self, text="t-Student test - computation of the statistics", width=40, font="none 12 bold")
-        self.label.pack(pady=50)
+        self.label.pack(pady=30)
 
         self.label2 = tk.Label(self, text='Application of t-student test to compare averages of two populations')
         self.label2.config(font=('helvetica', 10))
@@ -1597,6 +1657,9 @@ class TStudentTestStatisticsComputation(tk.Frame):
         self.button1 = tk.Button(self, text='Validate H0', command=self.count_measures, bg='brown',
                                  fg='white')
         self.button1.pack(pady=10)
+
+        self.answer = tk.Label(self, text="", width=40, font="none 12 bold")
+        self.answer.pack(pady=15)
 
         self.buttonExit = tk.Button(self, text="Exit", width=14, height=4, font="none 14 bold", bg="#3e4444", fg="white", command=lambda: master.switch_frame(st.StartPage))
         self.buttonExit.pack(pady=10)
@@ -1645,5 +1708,5 @@ class TStudentTestStatisticsComputation(tk.Frame):
 
     def get_ref_t(self, alpha):
         gl = self.first_sample_size + self.second_sample_size - 2
-        return stats.t.ppf(1-(alpha/2), gl)
+        return stats.t.ppf(1- (alpha / 2), gl)
 
